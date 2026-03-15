@@ -139,6 +139,20 @@ def google_auth():
         except Exception as e2:
             print(f"[GoogleAuth] tokeninfo fallback failed: {e2}")
 
+    # Method 3: Try as access_token (if useGoogleLogin implicit flow is used)
+    if not email:
+        try:
+            resp = http_requests.get(
+                "https://www.googleapis.com/oauth2/v3/userinfo",
+                headers={'Authorization': f'Bearer {token}'},
+                timeout=10
+            )
+            if resp.status_code == 200:
+                info = resp.json()
+                email = info.get('email', '').lower()
+        except Exception as e3:
+            print(f"[GoogleAuth] userinfo fallback failed: {e3}")
+
     if not email:
         return jsonify({'error': 'Could not verify Google token. Please try again.'}), 401
 

@@ -129,7 +129,7 @@ export default function MatchingDashboard() {
               <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1}>
                 <CheckCircleOutline color="success" /> System Status
               </Typography>
-              <Divider sx={{ my: 2, borderColor: 'rgba(255,255,255,0.05)' }} />
+              <Divider sx={{ my: 2, borderColor: 'rgba(128,128,128,0.1)' }} />
 
               <Box display="flex" justifyContent="space-between" mb={2}>
                 <Typography color="text.secondary">Engine Version</Typography>

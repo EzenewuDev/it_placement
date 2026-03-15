@@ -35,7 +35,7 @@ export default function CompanyProfile() {
             <Grid container spacing={4}>
                 <Grid item xs={12} md={4}>
                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}>
-                        <Paper sx={{ p: 4, height: '100%', textAlign: 'center', background: 'rgba(17, 25, 40, 0.75)' }}>
+                        <Paper sx={{ p: 4, height: '100%', textAlign: 'center', bgcolor: "background.paper" }}>
                             <Avatar
                                 sx={{
                                     width: 100, height: 100, mx: 'auto', mb: 3,
@@ -53,7 +53,7 @@ export default function CompanyProfile() {
                             </Typography>
                             <Chip label="Verified Partner" size="small" color="secondary" sx={{ mt: 1, fontWeight: 'bold' }} />
 
-                            <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.05)' }} />
+                            <Divider sx={{ my: 4, borderColor: 'rgba(128,128,128,0.1)' }} />
 
                             <Box textAlign="left">
                                 <Typography variant="subtitle2" color="text.secondary" mb={2} textTransform="uppercase" letterSpacing={1}>

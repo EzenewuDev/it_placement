@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Box, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Avatar, Tooltip } from '@mui/material';
-import { Dashboard as DashboardIcon, Logout as LogoutIcon, Person as PersonIcon, Psychology as PsychologyIcon, School as SchoolIcon, Business as BusinessIcon } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
+import { Dashboard as DashboardIcon, Logout as LogoutIcon, Person as PersonIcon, Psychology as PsychologyIcon, School as SchoolIcon, Business as BusinessIcon, Map as MapIcon, PaymentsOutlined as PaymentsIcon, AssignmentInd as SupervisorIcon, LightMode, DarkMode } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import useAuthStore from '../../store/authStore';
+import useThemeStore from '../../store/themeStore';
 
 const drawerWidth = 260;
 
@@ -11,6 +13,9 @@ export default function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuthStore();
+  const toggleTheme = useThemeStore(state => state.toggleTheme);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const [isHovered, setIsHovered] = useState(null);
 
   const handleLogout = () => {
@@ -19,10 +24,15 @@ export default function MainLayout() {
   };
 
   const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: <DashboardIcon />, roles: ['admin', 'student', 'company'] },
+    { path: '/dashboard', label: 'Overview', icon: <DashboardIcon />, roles: ['admin', 'student', 'company'] },
+    { path: '/admin/overview', label: 'Admin Dashboard', icon: <DashboardIcon />, roles: ['admin'] },
+    { path: '/admin/supervisor', label: 'Supervisor Hub', icon: <SupervisorIcon />, roles: ['admin'] },
     { path: '/admin/matching', label: 'AI Matching Engine', icon: <PsychologyIcon />, roles: ['admin'] },
     { path: '/student/profile', label: 'My Profile', icon: <PersonIcon />, roles: ['student'] },
+    { path: '/student/geomatch', label: 'Geo-Match Insights', icon: <MapIcon />, roles: ['student'] },
+    { path: '/student/payment', label: 'Pay Placement Token', icon: <PaymentsIcon />, roles: ['student'] },
     { path: '/company/profile', label: 'Company Profile', icon: <BusinessIcon />, roles: ['company'] },
+    { path: '/company/payment', label: 'Pay Annual Dues', icon: <PaymentsIcon />, roles: ['company'] },
   ];
 
   const filteredMenu = menuItems.filter(item => item.roles.includes(user?.role));
@@ -33,12 +43,16 @@ export default function MainLayout() {
         position="fixed"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          backdropFilter: 'blur(20px)',
-          backgroundColor: 'rgba(15, 23, 42, 0.65)',
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Box display="flex" alignItems="center" gap={2}>
+          <Box 
+            display="flex" 
+            alignItems="center" 
+            gap={2} 
+            onClick={() => navigate('/dashboard')}
+            sx={{ cursor: 'pointer', transition: 'opacity 0.2s', '&:hover': { opacity: 0.8 } }}
+          >
             <Box sx={{
               bgcolor: 'rgba(99, 102, 241, 0.1)',
               p: 1,
@@ -67,11 +81,25 @@ export default function MainLayout() {
                 </Typography>
               </Box>
             </Box>
+            
+            <Tooltip title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}>
+              <IconButton
+                onClick={toggleTheme}
+                sx={{
+                  bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                  color: isDark ? '#fff' : '#000',
+                  '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }
+                }}
+              >
+                {isDark ? <LightMode fontSize="small" /> : <DarkMode fontSize="small" />}
+              </IconButton>
+            </Tooltip>
+
             <Tooltip title="Secure Logout">
               <IconButton
                 onClick={handleLogout}
                 sx={{
-                  bgcolor: 'rgba(255,255,255,0.05)',
+                  bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
                   '&:hover': { bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }
                 }}
               >
@@ -111,10 +139,10 @@ export default function MainLayout() {
                     position: 'relative',
                     overflow: 'hidden',
                     transition: 'all 0.3s ease',
-                    color: isActive ? '#fff' : '#94a3b8',
+                    color: isActive ? (isDark ? '#fff' : '#000') : (isDark ? '#94a3b8' : '#64748b'),
                     bgcolor: isActive ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
                     '&:hover': {
-                      bgcolor: isActive ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255,255,255,0.05)'
+                      bgcolor: isActive ? 'rgba(99, 102, 241, 0.2)' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)')
                     }
                   }}
                 >
@@ -133,7 +161,7 @@ export default function MainLayout() {
                     />
                   )}
                   <ListItemIcon sx={{
-                    color: isActive ? '#818cf8' : (isHovered === index ? '#fff' : 'inherit'),
+                    color: isActive ? '#818cf8' : (isHovered === index ? (isDark ? '#fff' : '#000') : 'inherit'),
                     minWidth: 40,
                     transition: 'color 0.3s ease'
                   }}>

@@ -33,7 +33,7 @@ export default function StudentProfile() {
             <Grid container spacing={4}>
                 <Grid item xs={12} md={4}>
                     <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-                        <Paper sx={{ p: 4, height: '100%', textAlign: 'center', background: 'rgba(17, 25, 40, 0.75)' }}>
+                        <Paper sx={{ p: 4, height: '100%', textAlign: 'center', bgcolor: "background.paper" }}>
                             <Avatar
                                 sx={{
                                     width: 120, height: 120, mx: 'auto', mb: 3,
@@ -53,7 +53,7 @@ export default function StudentProfile() {
                                 <LocationOn fontSize="small" color="action" />
                                 <Typography variant="body2" color="text.secondary">San Francisco, CA</Typography>
                             </Box>
-                            <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.05)' }} />
+                            <Divider sx={{ my: 3, borderColor: 'rgba(128,128,128,0.1)' }} />
 
                             <Box textAlign="left">
                                 <Typography variant="subtitle2" color="text.secondary" mb={1} textTransform="uppercase" letterSpacing={1}>
@@ -79,11 +79,11 @@ export default function StudentProfile() {
                                 {!resumeUploaded ? (
                                     <Box
                                         sx={{
-                                            border: '2px dashed rgba(255,255,255,0.2)',
+                                            border: '2px dashed rgba(128,128,128,0.3)',
                                             borderRadius: 4,
                                             p: 5,
                                             textAlign: 'center',
-                                            bgcolor: 'rgba(255,255,255,0.02)',
+                                            bgcolor: 'rgba(128,128,128,0.05)',
                                             transition: 'all 0.3s ease',
                                             '&:hover': {
                                                 borderColor: 'primary.main',
