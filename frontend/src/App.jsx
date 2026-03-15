@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import MainLayout from './components/Layout/MainLayout';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
+import SplashScreen from './pages/Auth/SplashScreen';
 import Dashboard from './pages/Dashboard/Dashboard';
 import AdminOverview from './pages/Admin/AdminOverview';
 import MatchingDashboard from './pages/Admin/MatchingDashboard';
@@ -115,6 +116,12 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Show splash on mobile/tablet, go straight to login on desktop
+const SmartRoot = () => {
+  const isMobile = window.innerWidth < 1024;
+  return isMobile ? <SplashScreen /> : <Navigate to="/login" replace />;
+};
+
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 function App() {
@@ -147,7 +154,8 @@ function App() {
               <Route path="/admin/matching" element={<MatchingDashboard />} />
             </Route>
 
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<SmartRoot />} />
+            <Route path="/splash" element={<SplashScreen />} />
           </Routes>
         </Router>
       </ThemeProvider>
