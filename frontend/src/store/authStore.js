@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
 
-export const api = axios.create({ baseURL: 'http://localhost:5001/api' });
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+export const api = axios.create({ baseURL: BASE_URL });
 
 // Re-attach token on page load if it exists in localStorage
 const storedToken = localStorage.getItem('token');

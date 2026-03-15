@@ -13,11 +13,18 @@ limiter = Limiter(key_func=get_remote_address)
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'dev-secret-key'
-    # Use SQLite for simplicity since this is an MVP without a Postgres pod running trivially
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/it_placement_db.sqlite'
+
+    # ── Secrets (environment vars on Render, fallback for local dev) ──
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
+    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-string')
+
+    # ── Database: PostgreSQL on Render, SQLite locally ──
+    database_url = os.environ.get('DATABASE_URL', 'sqlite:///it_placement.db')
+    # Render gives postgres:// but SQLAlchemy 1.4+ requires postgresql://
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
     app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
     
